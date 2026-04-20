@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВтораРъка - Купи и Продай</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo" onclick="location.reload()">
+            <i class="fa-solid fa-tags"></i> ВтораРъка
+        </div>
+        <div class="nav-buttons">
+            <button id="favoritesBtn" class="btn-outline"><i class="fa-solid fa-heart"></i> Любими</button>
+            <button id="loginBtn" class="btn-outline"><i class="fa-solid fa-user"></i> Вход</button>
+            <button id="registerBtn" class="btn-outline">Регистрация</button>
+            <button id="addAdBtn" class="btn-primary" style="display: none;"><i class="fa-solid fa-plus"></i> Добави обява</button>
+            <button id="myAdsBtn" class="btn-outline" style="display: none;"><i class="fa-solid fa-box-open"></i> Моите обяви</button>
+            <button id="logoutBtn" class="btn-outline" style="display: none;"><i class="fa-solid fa-right-from-bracket"></i> Изход</button>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <h1>Открий страхотни находки на супер цени</h1>
+        <p>Хиляди обяви от цялата страна те очакват</p>
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Какво търсиш днес?" />
+            <select id="sortSelect" style="border: none; padding: 0 15px; border-left: 1px solid #ffe5ec; outline: none; color: #495057; font-family: 'Poppins', sans-serif;">
+                <option value="newest">Най-нови</option>
+                <option value="priceAsc">Най-евтини</option>
+                <option value="priceDesc">Най-скъпи</option>
+            </select>
+            <button id="searchBtn" class="btn-search"><i class="fa-solid fa-magnifying-glass"></i> Търси</button>
+        </div>
+    </section>
+
+    <main class="container">
+        <aside class="sidebar">
+            <h3>Категории</h3>
+            <ul id="categoryList">
+                <li onclick="filterByCategory('Всички')"><i class="fa-solid fa-globe"></i> Всички</li>
+                <li onclick="filterByCategory('Електроника')"><i class="fa-solid fa-mobile-screen"></i> Електроника</li>
+                <li onclick="filterByCategory('Мода')"><i class="fa-solid fa-shirt"></i> Мода</li>
+                <li onclick="filterByCategory('Дом и градина')"><i class="fa-solid fa-house"></i> Дом и градина</li>
+                <li onclick="filterByCategory('Авто')"><i class="fa-solid fa-car"></i> Авто</li>
+                <li onclick="filterByCategory('Спорт')"><i class="fa-solid fa-futbol"></i> Спорт</li>
+            </ul>
+        </aside>
+
+        <div style="flex: 1;">
+            <h2 id="pageTitle" class="section-title">Последни обяви</h2>
+            <div class="items-grid" id="itemsContainer">
+                <p>Зареждане на обяви...</p>
+            </div>
+        </div>
+    </main>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Вход</h2>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="Имейл" required>
+                <input type="password" id="loginPassword" placeholder="Парола" required>
+                <button type="submit" class="btn-primary">Влез</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('registerModal')">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="registerForm">
+                <input type="text" id="regFirstName" placeholder="Име" required>
+                <input type="text" id="regLastName" placeholder="Фамилия" required>
+                <input type="email" id="regEmail" placeholder="Имейл" required>
+                <input type="password" id="regPassword" placeholder="Парола" required>
+                <input type="text" id="regPhone" placeholder="Телефон">
+                <button type="submit" class="btn-primary">Създай профил</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="addAdModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addAdModal')">&times;</span>
+            <h2>Публикувай обява</h2>
+            <form id="addAdForm">
+                <input type="text" id="itemTitle" placeholder="Заглавие" required>
+                <textarea id="itemDesc" placeholder="Описание" style="width:100%; height:80px; margin:10px 0; padding:10px;"></textarea>
+                <input type="number" id="itemPrice" placeholder="Цена (лв.)" required>
+                <label>Снимка:</label>
+                <input type="file" id="itemFile" accept="image/*">
+                <select id="itemCategory">
+                    <option value="Електроника">Електроника</option>
+                    <option value="Мода">Мода</option>
+                    <option value="Дом и градина">Дом и градина</option>
+                    <option value="Авто">Авто</option>
+                    <option value="Спорт">Спорт</option>
+                </select>
+                <input type="text" id="itemCity" placeholder="Град" required>
+                <select id="itemCondition">
+                    <option value="Втора употреба">Втора употреба</option>
+                    <option value="Ново">Ново</option>
+                </select>
+                <label><input type="checkbox" id="itemNegotiable"> По договаряне</label>
+                <button type="submit" class="btn-primary">Публикувай</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editModal')">&times;</span>
+            <h2>Редактирай обява</h2>
+            <form id="editForm">
+                <input type="hidden" id="editId">
+                <input type="text" id="editTitle" placeholder="Заглавие" required>
+                <input type="number" id="editPrice" placeholder="Цена" required>
+                <textarea id="editDesc" style="width:100%; height:80px; margin:10px 0; padding:10px;"></textarea>
+                <button type="submit" class="btn-primary">Запази промените</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="detailsModal" class="modal">
+        <div class="modal-content" style="max-width: 800px; padding:0; overflow:hidden;">
+            <span class="close" onclick="closeModal('detailsModal')" style="position:absolute; top:15px; right:20px; z-index:10; background:white; border-radius:50%; width:35px; height:35px; text-align:center; line-height:35px; box-shadow:0 2px 5px rgba(0,0,0,0.2);">&times;</span>
+            <div id="detailsContent"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
