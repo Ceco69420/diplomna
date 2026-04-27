@@ -10,30 +10,26 @@
 </head>
 <body>
     <header class="navbar">
-        <div class="logo" onclick="location.reload()">
-            <i class="fa-solid fa-tags"></i> ВтораРъка
-        </div>
+        <div class="logo" onclick="location.reload()"><i class="fa-solid fa-tags"></i> ВтораРъка</div>
         <div class="nav-buttons">
-            <button id="favoritesBtn" class="btn-outline"><i class="fa-solid fa-heart"></i> Любими</button>
-            <button id="loginBtn" class="btn-outline"><i class="fa-solid fa-user"></i> Вход</button>
+            <button id="loginBtn" class="btn-outline">Вход</button>
             <button id="registerBtn" class="btn-outline">Регистрация</button>
+            <button id="profileBtn" class="btn-outline" style="display: none;">Моят профил</button>
             <button id="addAdBtn" class="btn-primary" style="display: none;"><i class="fa-solid fa-plus"></i> Добави обява</button>
-            <button id="myAdsBtn" class="btn-outline" style="display: none;"><i class="fa-solid fa-box-open"></i> Моите обяви</button>
-            <button id="logoutBtn" class="btn-outline" style="display: none;"><i class="fa-solid fa-right-from-bracket"></i> Изход</button>
+            <button id="logoutBtn" class="btn-outline" style="display: none;">Изход</button>
         </div>
     </header>
 
     <section class="hero-section">
-        <h1>Открий страхотни находки на супер цени</h1>
-        <p>Хиляди обяви от цялата страна те очакват</p>
+        <h1>Открий страхотни находки</h1>
         <div class="search-bar">
             <input type="text" id="searchInput" placeholder="Какво търсиш днес?" />
-            <select id="sortSelect" style="border: none; padding: 0 15px; border-left: 1px solid #ffe5ec; outline: none; color: #495057; font-family: 'Poppins', sans-serif;">
+            <select id="sortSelect">
                 <option value="newest">Най-нови</option>
                 <option value="priceAsc">Най-евтини</option>
                 <option value="priceDesc">Най-скъпи</option>
             </select>
-            <button id="searchBtn" class="btn-search"><i class="fa-solid fa-magnifying-glass"></i> Търси</button>
+            <button id="searchBtn" class="btn-search">Търси</button>
         </div>
     </section>
 
@@ -41,20 +37,18 @@
         <aside class="sidebar">
             <h3>Категории</h3>
             <ul id="categoryList">
-                <li onclick="filterByCategory('Всички')"><i class="fa-solid fa-globe"></i> Всички</li>
-                <li onclick="filterByCategory('Електроника')"><i class="fa-solid fa-mobile-screen"></i> Електроника</li>
-                <li onclick="filterByCategory('Мода')"><i class="fa-solid fa-shirt"></i> Мода</li>
-                <li onclick="filterByCategory('Дом и градина')"><i class="fa-solid fa-house"></i> Дом и градина</li>
-                <li onclick="filterByCategory('Авто')"><i class="fa-solid fa-car"></i> Авто</li>
-                <li onclick="filterByCategory('Спорт')"><i class="fa-solid fa-futbol"></i> Спорт</li>
+                <li class="active" onclick="filterByCategory('Всички')">Всички</li>
+                <li onclick="filterByCategory('Електроника')">Електроника</li>
+                <li onclick="filterByCategory('Мода')">Мода</li>
+                <li onclick="filterByCategory('Дом и градина')">Дом и градина</li>
+                <li onclick="filterByCategory('Авто')">Авто</li>
+                <li onclick="filterByCategory('Спорт')">Спорт</li>
             </ul>
         </aside>
 
         <div style="flex: 1;">
             <h2 id="pageTitle" class="section-title">Последни обяви</h2>
-            <div class="items-grid" id="itemsContainer">
-                <p>Зареждане на обяви...</p>
-            </div>
+            <div class="items-grid" id="itemsContainer"><p>Зареждане на обяви...</p></div>
         </div>
     </main>
 
@@ -79,9 +73,27 @@
                 <input type="text" id="regLastName" placeholder="Фамилия" required>
                 <input type="email" id="regEmail" placeholder="Имейл" required>
                 <input type="password" id="regPassword" placeholder="Парола" required>
-                <input type="text" id="regPhone" placeholder="Телефон">
-                <button type="submit" class="btn-primary">Създай профил</button>
+                <input type="text" id="regPhone" placeholder="Телефон" required>
+                <button type="submit" class="btn-primary">Регистрация</button>
             </form>
+        </div>
+    </div>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content profile-card">
+            <span class="close" onclick="closeModal('profileModal')">&times;</span>
+            <div class="profile-header">
+                <div class="profile-avatar"><i class="fa-solid fa-user-tie"></i></div>
+                <h2 id="profileFullName">Потребител</h2>
+            </div>
+            <div class="profile-body">
+                <div class="info-group"><label>Имейл:</label><span id="displayEmail">-</span></div>
+                <div class="info-group"><label>Телефон:</label><span id="displayPhone">-</span></div>
+                <hr>
+                <div class="profile-stats">
+                    <div class="stat-item"><strong id="myAdsCount">0</strong><span>Моите обяви</span></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -91,48 +103,33 @@
             <h2>Публикувай обява</h2>
             <form id="addAdForm">
                 <input type="text" id="itemTitle" placeholder="Заглавие" required>
-                <textarea id="itemDesc" placeholder="Описание" style="width:100%; height:80px; margin:10px 0; padding:10px;"></textarea>
                 <input type="number" id="itemPrice" placeholder="Цена (лв.)" required>
-                <label>Снимка:</label>
-                <input type="file" id="itemFile" accept="image/*">
-                <select id="itemCategory">
+                <select id="itemCategory" style="width:100%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ddd;">
                     <option value="Електроника">Електроника</option>
                     <option value="Мода">Мода</option>
+                    <option value="Спорт">Спорт</option>
                     <option value="Дом и градина">Дом и градина</option>
                     <option value="Авто">Авто</option>
-                    <option value="Спорт">Спорт</option>
                 </select>
                 <input type="text" id="itemCity" placeholder="Град" required>
-                <select id="itemCondition">
-                    <option value="Втора употреба">Втора употреба</option>
-                    <option value="Ново">Ново</option>
-                </select>
-                <label><input type="checkbox" id="itemNegotiable"> По договаряне</label>
-                <button type="submit" class="btn-primary">Публикувай</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('editModal')">&times;</span>
-            <h2>Редактирай обява</h2>
-            <form id="editForm">
-                <input type="hidden" id="editId">
-                <input type="text" id="editTitle" placeholder="Заглавие" required>
-                <input type="number" id="editPrice" placeholder="Цена" required>
-                <textarea id="editDesc" style="width:100%; height:80px; margin:10px 0; padding:10px;"></textarea>
-                <button type="submit" class="btn-primary">Запази промените</button>
+                <label style="display:block; margin-top:10px; font-size:14px; font-weight:600;">Снимка:</label>
+                <input type="file" id="itemFile" accept="image/*" style="border:none; padding:5px 0;">
+                <textarea id="itemDesc" placeholder="Описание на обявата..." style="width:100%; height:100px; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ddd; font-family: inherit;"></textarea>
+                <button type="submit" class="btn-primary" style="width:100%;">Публикувай обява</button>
             </form>
         </div>
     </div>
 
     <div id="detailsModal" class="modal">
-        <div class="modal-content" style="max-width: 800px; padding:0; overflow:hidden;">
-            <span class="close" onclick="closeModal('detailsModal')" style="position:absolute; top:15px; right:20px; z-index:10; background:white; border-radius:50%; width:35px; height:35px; text-align:center; line-height:35px; box-shadow:0 2px 5px rgba(0,0,0,0.2);">&times;</span>
+        <div class="modal-content" style="max-width: 700px;">
+            <span class="close" onclick="closeModal('detailsModal')">&times;</span>
             <div id="detailsContent"></div>
         </div>
     </div>
+
+    <footer class="site-footer">
+        <div class="footer-bottom">&copy; 2026 ВтораРъка. Всички права запазени.</div>
+    </footer>
 
     <script src="app.js"></script>
 </body>
