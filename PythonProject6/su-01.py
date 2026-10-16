@@ -1,0 +1,6 @@
+price = float(input("Enter price: "))
+discount1 = float(input())
+discount2 = float(input())
+price = price * (1 - discount1 / 100)
+price = price * (1 - discount2 / 100)
+print(f"{price:.2f}")
